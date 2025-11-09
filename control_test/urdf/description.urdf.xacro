@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="test_robot">
+
+    <xacro:include filename="gazebo.urdf.xacro" />
+    <xacro:include filename="ros2_control.xacro" />
+
+
+    <xacro:property name="my_pi" value="3.14"/>
+    <xacro:property name="caster_radius" value="0.1"/>
+    <xacro:property name="wheel_radius" value="0.1"/>
+    <xacro:property name="wheel_width" value="0.05"/>
+    <xacro:property name="base_length" value="0.4"/>
+    <xacro:property name="base_width" value="0.2"/>
+    <xacro:property name="base_height" value="0.1"/>
+
+    <!-- <link name="base_footprint"/> -->
+
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="${base_length} ${base_width} ${base_height}"/>
+            </geometry>
+            <origin xyz="0 0 ${base_height/2 + 0.05}"/>
+        </visual>   
+        <collision>
+            <geometry>
+                <box size="${base_length} ${base_width} ${base_height}"/>
+            </geometry>
+            <origin xyz="0 0 ${base_height/2 + 0.05}"/>
+        </collision>
+        <inertial>
+            <mass value="5.0"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="0.05" iyy="0.05" izz="0.05" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
+    </link>
+
+    <!-- <joint name="base_joint" type="fixed">
+        <parent link="base_footprint"/>
+        <child link="base_link"/>   
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint> -->
+
+    <link name="right_wheel">
+        <visual>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+            </geometry>
+                        
+            <!-- <origin xyz="${-base_length/4} ${base_width/2 + wheel_width} -0.05" rpy="${my_pi/2} 0 0"/> -->
+
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+            </geometry>
+            <!-- <origin xyz="${-base_length/4} ${base_width/2 + wheel_width} -0.05" rpy="${my_pi/2} 0 0"/> -->
+
+        </collision>
+        <inertial>
+            <mass value="1.0"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="0.01" iyy="0.01" izz="0.01" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
+    </link>
+
+    <link name="left_wheel">
+        <visual>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="1.0"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="0.01" iyy="0.01" izz="0.01" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
+    </link>
+    <link name="front_wheel">
+        <visual >
+            <geometry>
+                <sphere radius="${caster_radius}"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <sphere radius="${caster_radius}"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="0.5"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="0.005" iyy="0.005" izz="0.005" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
+    </link>
+
+
+    <joint name="right_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="right_wheel"/>
+        <origin xyz="${-base_length/4} ${base_width/2 + wheel_width} ${base_height/2}" rpy="${my_pi/2} 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <joint name="left_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="left_wheel"/>
+        <origin xyz="${-base_length/4} -${base_width/2 + wheel_width} ${base_height/2}" rpy="${my_pi/2} 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <joint name="front_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="front_wheel"/>
+        <origin xyz="${base_length/4} 0 ${base_height/2}" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <!-- <xacro:include filename="gazebo.urdf.xacro" />
+    <xacro:include filename="ros2_control.xacro" /> -->
+</robot>
